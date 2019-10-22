@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch';
-import NextStars from '../components/NextStars';
+import NextStars from './../components/NextStars';
 
 function SSRPage({ stargazers_count }) {
   return (

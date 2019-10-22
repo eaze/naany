@@ -2,7 +2,7 @@ import React from 'react';
 import App from 'next/app';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline } from '@material-ui/core';
-import CUSTOM_THEME from '../materialTheme';
+import CUSTOM_THEME from './../materialTheme';
 import { Layout, LayoutContext } from './../components';
 
 class MyApp extends App {
