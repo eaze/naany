@@ -17,9 +17,10 @@
     "dev": "next",
     "build": "next build",
     "export": "next export",
-    "deploy_netlify_preview": "npm run build && npm run export && netlify deploy",
+    "build_and_export": "next build && next export",
+    "deploy_netlify_preview": "npm run build && npm run export && cd ./out && netlify deploy",
     "deploy_netlify_prod": "netlify deploy --prod",
-    "deploy_now_preview": "npm run build && npm run export && now",
+    "deploy_now_preview": "npm run build && npm run export && cd ./out && now",
     "deploy_now_prod": "now --prod",
     "start": "next start"
   },
