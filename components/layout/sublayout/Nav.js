@@ -6,12 +6,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Home, Lock, LockOpen } from '@material-ui/icons';
+import { Home, LocalTaxi, Lock, LockOpen } from '@material-ui/icons';
 import { useLayoutContext, useUserSessionContext } from '../../../contextes';
 
 const useStyles = makeStyles(theme => ({
   root: {},
-  menu: { width: theme.typography.pxToRem(240) },
+  menu: { minWidth: theme.typography.pxToRem(240) },
 }));
 
 function Nav() {
@@ -81,6 +81,15 @@ function NavMenu({ className, toggleDrawer, isAuthenticated }) {
               {isAuthenticated ? <LockOpen /> : <Lock />}
             </ListItemIcon>
             <ListItemText primary="Protected" />
+          </ListItem>
+        </Link>
+
+        <Link href="/assignDriverToDepot">
+          <ListItem button>
+            <ListItemIcon>
+              {isAuthenticated ? <LocalTaxi /> : <Lock />}
+            </ListItemIcon>
+            <ListItemText primary="Assign Driver To Depot" />
           </ListItem>
         </Link>
       </List>
