@@ -1,5 +1,14 @@
 import fetch from 'isomorphic-unfetch';
-import { Container, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Container,
+  FormHelperText,
+  makeStyles,
+  MenuItem,
+  Paper,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import { useUserSessionContext } from './../contextes';
 import {
   assignDriverToDepot,
@@ -25,10 +34,58 @@ function AssignDriverToDepot({ depots }) {
   const { userSession } = useUserSessionContext();
   console.log(depots);
   return (
-    <Container className={classes.container} component="main">
-      Check the console
-    </Container>
-  );
+    <Paper className={classes.container} square>
+      <Typography
+        align="left"
+        variant="h4"
+      >
+        Add Driver
+      </Typography>
+
+      <TextField
+        data-testid="driver-input-wrap"
+        fullWidth
+        label="Select Driver"
+        margin="normal"
+        // onChange={resetErrorStateOnInputChange(setDriverEmail)}
+        placeholder="Enter the driver's email address"
+        required
+        type="text"
+        variant="outlined"
+      />
+
+      <TextField
+        data-testid="depot-select-wrap"
+        fullWidth
+        label="Assign a Depot"
+        margin="normal"
+        // onChange={resetErrorStateOnInputChange(setSelectedDepot)}
+        required
+        select
+        type="text"
+        variant="outlined"
+      >
+        {depots.map(depot => (
+          <MenuItem
+            value={depot.id}
+            key={depot.id}
+          >
+            {depot.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <Button
+        color='primary'
+        // onClick={handleAddDriver}
+        fullWidth
+        size='large'
+        variant='contained'
+      >
+        Add Driver
+      </Button>
+    </Paper>
+);
 }
 
 AssignDriverToDepot.getInitialProps = async () => {
