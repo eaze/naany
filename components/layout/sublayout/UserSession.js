@@ -119,7 +119,9 @@ function UserSessionMenu({
         open={isMenuOpen}
         onClose={toggleMenu}
       >
-        <MenuItem onClick={() => alert(authToken)}>Reveal Token</MenuItem>
+        <MenuItem onClick={() => console.log('Auth Token', authToken)}>
+          Log Token
+        </MenuItem>
         <MenuItem onClick={signOut}>Sign Out</MenuItem>
       </Menu>
     </React.Fragment>

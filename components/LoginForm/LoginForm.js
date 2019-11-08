@@ -8,8 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useUserSessionContext } from './../../contextes';
-
-const AUTH_API_ENDPOINT = 'https://api.staging.eaze.tech/api/auth/signin';
+import { signIn } from './../../api';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -33,46 +32,12 @@ function LoginForm() {
 
   const { setUserSession } = useUserSessionContext();
 
-  const AUTH_API_REQUEST_OPTIONS = React.useMemo(
-    () => ({
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    }),
-    [email, password],
-  );
-
   const classes = useStyles();
 
-  const processSignInAttempt = React.useCallback(async () => {
-    try {
-      console.group('AUTHENTICATING');
-      const request = new Request(AUTH_API_ENDPOINT, AUTH_API_REQUEST_OPTIONS);
-
-      console.log('SUBMITTING REQUEST', request);
-      const response = await fetch(request);
-      console.log('RESPONSE RECEIVED', response);
-      const json = await response.json();
-
-      if (!response.ok) {
-        alert(`Sorry, we were unable to authenticate you.`);
-        throw json.message || 'API failed to provide a explaination.';
-      } else {
-        setUserSession({ userSession: json });
-        Router.push('/assignDriverToDepot');
-      }
-    } catch (error) {
-      console.error('Failed to authenticate:', error);
-    } finally {
-      console.groupEnd();
-    }
-  }, [AUTH_API_ENDPOINT, AUTH_API_REQUEST_OPTIONS, setUserSession]);
+  const processSignInAttempt = React.useCallback(
+    async () => signIn(email, password),
+    [signIn, email, password],
+  );
 
   return (
     <Paper className={classes.container} elevation={3}>

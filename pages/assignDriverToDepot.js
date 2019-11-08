@@ -23,10 +23,10 @@ const useStyles = makeStyles(theme => ({
 function AssignDriverToDepot({ depots }) {
   const classes = useStyles();
   const { userSession } = useUserSessionContext();
-  console.log(userSession);
+  console.log(depots);
   return (
     <Container className={classes.container} component="main">
-      {depots}
+      Check the console
     </Container>
   );
 }
@@ -37,12 +37,10 @@ AssignDriverToDepot.getInitialProps = async () => {
   // -> We won't have access to context objects here since this is a static
   //    method, so we need to access such via localStorage/cookie
   const dispensaryId = 2; // workaround to above problem for now
-  let json = { depots: [] };
-  try {
-    const depots = await getDepotsForDispensary(dispensaryId);
-    json = { depots };
-  } catch (error) {}
-  return json;
+  let pageProps = { depots: [] };
+  const depots = await getDepotsForDispensary(dispensaryId);
+  if (depots.length) pageProps.depots = depots;
+  return pageProps;
 };
 
 export default AssignDriverToDepot;
