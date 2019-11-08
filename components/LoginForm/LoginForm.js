@@ -34,10 +34,11 @@ function LoginForm() {
 
   const classes = useStyles();
 
-  const processSignInAttempt = React.useCallback(
-    async () => signIn(email, password),
-    [signIn, email, password],
-  );
+  const processSignInAttempt = React.useCallback(async () => {
+    const userSession = await signIn(email, password);
+    setUserSession({ userSession });
+    Router.push('/assignDriverToDepot');
+  }, [signIn, email, password]);
 
   return (
     <Paper className={classes.container} elevation={3}>
