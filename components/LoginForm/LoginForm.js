@@ -30,7 +30,7 @@ function LoginForm() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const { setUserSession } = useUserSessionContext();
+  const { setUserSession } = useUserSessionContext() || {};
 
   const classes = useStyles();
 
