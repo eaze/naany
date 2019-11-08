@@ -18,7 +18,7 @@ async function signIn(email, password) {
     };
 
     const response = await fetch(endpoint, requestOptions);
-    const json = await response.json();
+    json = await response.json();
 
     if (!response.ok) throw json.message;
     console.log('SUCCESS');
