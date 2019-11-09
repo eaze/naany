@@ -46,14 +46,14 @@ function LoginForm() {
         New Phone, Who Dis?
       </Typography>
       <TextField
-        required
-        label="Email"
-        type="text"
-        margin="normal"
-        variant="outlined"
-        autoFocus
         autoComplete="email"
+        autoFocus
+        label="Email"
+        margin="normal"
         onChange={({ target: { value } }) => setEmail(value)}
+        required
+        type="text"
+        variant="outlined"
       />
       <TextField
         required
