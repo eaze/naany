@@ -23,6 +23,21 @@ const useStyles = makeStyles(theme => ({
 function Login() {
   const classes = useStyles();
 
+  const handleLoginEvent = ({ key = '', newValue = null }) => {
+    const isLoginEvent = key === 'login';
+    const notDeletionEvent = newValue !== null;
+    if (isLoginEvent && notDeletionEvent) {
+      console.log('Signed in. Redirecting you home. 🛫 ➡️ 🏠');
+      Router.push('/');
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('storage', handleLoginEvent);
+
+    return () => window.removeEventListener('storage', handleLoginEvent);
+  }, [null]);
+
   return (
     <main className={classes.container}>
       <LoginForm />

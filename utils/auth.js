@@ -28,6 +28,9 @@ const login = userSession => {
   //   - https://github.com/bitwiseshiftleft/sjcl/
   // - come up with a different means of exposing this information
   cookie.set('userSession', userSession, cookieSettings);
+  // Invoke logging in from all windows
+  window.localStorage.setItem('login', Date.now());
+  window.localStorage.removeItem('logout');
 };
 
 const getUserSessionFromCookie = () => {
@@ -62,27 +65,33 @@ const redirectIfUnauthenticated = ctx => {
 
 const logout = () => {
   cookie.remove('userSession');
-  // to support logging out from all windows
+  // Invoke logging out from all windows
   window.localStorage.setItem('logout', Date.now());
+  window.localStorage.removeItem('login');
   Router.push('/login');
 };
 
 const withAuthSync = WrappedComponent => {
   const Wrapper = props => {
-    const syncLogout = event => {
-      if (event.key === 'logout') {
-        console.log('Signed out. Redirecting to login page. 🛫 ➡️ 🔐');
-        Router.push('/login');
+    const syncSession = event => {
+      const notDeletionEvent = event.newValue !== null;
+      if (notDeletionEvent) {
+        switch (event.key) {
+          case 'logout':
+            console.log('Signed out. Redirecting to login page. 🛫 ➡️ 🔐');
+            Router.push('/login');
+            break;
+          default:
+            console.log(`Unsupported session event key ${event.key}.`);
+            break;
+        }
       }
     };
 
     React.useEffect(() => {
-      window.addEventListener('storage', syncLogout);
+      window.addEventListener('storage', syncSession);
 
-      return () => {
-        window.removeEventListener('storage', syncLogout);
-        window.localStorage.removeItem('logout');
-      };
+      return () => window.removeEventListener('storage', syncSession);
     }, [null]);
 
     return <WrappedComponent {...props} />;
