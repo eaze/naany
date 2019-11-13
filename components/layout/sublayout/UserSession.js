@@ -1,9 +1,9 @@
 import React from 'react';
-import Router from 'next/router';
 import Link from 'next/link';
 import { AccountCircle } from '@material-ui/icons';
 import { Button, makeStyles, Menu, MenuItem } from '@material-ui/core';
 import { useUserSessionContext } from './../../../contextes';
+import { logout } from './../../../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,39 +24,37 @@ function UserSession() {
   const classes = useStyles();
   const parentEl = React.useRef();
 
-  const { userSession, setUserSession } = useUserSessionContext();
-
+  const { displayName = '', xAuthToken = '' } = useUserSessionContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = React.useMemo(() => Boolean(anchorEl), [anchorEl]);
 
-  const isAuthenticated = React.useMemo(() => Boolean(userSession.xAuthToken), [
-    userSession.xAuthToken,
+  const isAuthenticated = React.useMemo(() => Boolean(xAuthToken), [
+    xAuthToken,
   ]);
 
   const userFirstName = React.useMemo(() => {
     try {
-      return userSession.displayName.split(' ')[0];
+      return displayName.split(' ')[0];
     } catch (error) {
       return 'friend';
     }
-  }, [userSession.displayName]);
+  }, [displayName]);
 
   const toggleMenu = React.useCallback(() => {
     anchorEl ? setAnchorEl(null) : setAnchorEl(parentEl.current);
   }, [anchorEl, setAnchorEl, parentEl.current]);
 
   const signOut = React.useCallback(() => {
-    setUserSession({ userSession: {} });
     toggleMenu();
-    Router.push('/login');
-  }, [setUserSession, toggleMenu]);
+    logout();
+  }, [toggleMenu, logout]);
 
   return (
     <div ref={parentEl} className={classes.root}>
       {isAuthenticated ? (
         <UserSessionMenu
           anchorEl={anchorEl}
-          authToken={userSession.xAuthToken}
+          authToken={xAuthToken}
           isMenuOpen={isMenuOpen}
           signOut={signOut}
           toggleMenu={toggleMenu}

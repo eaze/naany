@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
-import { useUserSessionContext } from './../contextes';
+import { withAuthSync } from './../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -18,12 +18,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Home() {
+function Home({ userSession }) {
   const classes = useStyles();
-  const { userSession } = useUserSessionContext();
-  const greeting = userSession.xAuthToken
-    ? `Hi, ${userSession.displayName}! 👋`
-    : `Hi, stranger! 👽`;
+  const { displayName, xAuthToken } = userSession;
+  const greeting = xAuthToken ? `Hi, ${displayName}! 👋` : `Hi, stranger! 👽`;
   return (
     <main className={classes.container}>
       <Typography variant="h4">{greeting}</Typography>
@@ -31,4 +29,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withAuthSync(Home);

@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
-import { useUserSessionContext } from './../contextes';
+import { getUserSessionFromContext, withAuthSync } from './../utils/auth';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -15,10 +15,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Protected() {
+function Protected(props) {
+  const { xAuthToken = '' } = props;
   const classes = useStyles();
-  const { userSession } = useUserSessionContext();
-  const prompt = userSession.xAuthToken
+  const prompt = xAuthToken
     ? `You're authenticated! 🎉`
     : `You need to log in! 🛑`;
   return (
@@ -28,4 +28,9 @@ function Protected() {
   );
 }
 
-export default Protected;
+Protected.getInitialProps = async ctx => {
+  const userSession = getUserSessionFromContext(ctx);
+  return userSession;
+};
+
+export default withAuthSync(Protected);

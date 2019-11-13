@@ -6,6 +6,7 @@ import { CssBaseline } from '@material-ui/core';
 import CUSTOM_THEME from './../materialTheme';
 import { Layout } from './../components';
 import { LayoutContext, UserSessionContext } from './../contextes';
+import { getUserSessionFromContext } from './../utils/auth';
 
 class MyApp extends App {
   constructor(props) {
@@ -14,8 +15,21 @@ class MyApp extends App {
       layout: {
         navIsOpen: false,
       },
-      userSession: {},
     };
+  }
+
+  static async getInitialProps({ Component, router, ctx }) {
+    let pageProps = {};
+    let userSession = {};
+
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
+    if (ctx) userSession = getUserSessionFromContext(ctx);
+
+    /* your own logic */
+
+    return { pageProps, userSession };
   }
 
   /**
@@ -35,26 +49,8 @@ class MyApp extends App {
     };
   }
 
-  /**
-   *            USER SESSION MGMT
-   */
-
-  setUserSession = setUserSessionCallback => {
-    this.setState(setUserSessionCallback);
-  };
-
-  get userSessionContext() {
-    const { setUserSession } = this;
-    const { userSession } = this.state;
-    return {
-      userSession,
-      setUserSession,
-    };
-  }
-
   render() {
-    const { Component, pageProps } = this.props;
-
+    const { Component, pageProps, userSession } = this.props;
     return (
       <ThemeProvider theme={CUSTOM_THEME}>
         <Head>
@@ -62,9 +58,9 @@ class MyApp extends App {
         </Head>
         <CssBaseline />
         <LayoutContext.Provider value={this.layoutContext}>
-          <UserSessionContext.Provider value={this.userSessionContext}>
+          <UserSessionContext.Provider value={userSession}>
             <Layout>
-              <Component {...pageProps} />
+              <Component {...pageProps} userSession={userSession} />
             </Layout>
           </UserSessionContext.Provider>
         </LayoutContext.Provider>

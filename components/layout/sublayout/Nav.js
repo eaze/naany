@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Home, LocalTaxi, Lock, LockOpen } from '@material-ui/icons';
+import { Home, LocalTaxi, Lock, LockOpen, VpnKey } from '@material-ui/icons';
 import { useLayoutContext, useUserSessionContext } from '../../../contextes';
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 function Nav() {
   const classes = useStyles();
   const { layout, setLayout } = useLayoutContext();
-  const { userSession } = useUserSessionContext();
+  const userSession = useUserSessionContext();
 
   const isAuthenticated = React.useMemo(_ => Boolean(userSession.xAuthToken), [
     userSession,
@@ -90,6 +90,15 @@ function NavMenu({ className, toggleDrawer, isAuthenticated }) {
               {isAuthenticated ? <LocalTaxi /> : <Lock />}
             </ListItemIcon>
             <ListItemText primary="Assign Driver To Depot" />
+          </ListItem>
+        </Link>
+
+        <Link href="/login">
+          <ListItem button>
+            <ListItemIcon>
+              <VpnKey />
+            </ListItemIcon>
+            <ListItemText primary="Login" />
           </ListItem>
         </Link>
       </List>

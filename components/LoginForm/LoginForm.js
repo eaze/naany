@@ -30,14 +30,11 @@ function LoginForm() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const { setUserSession } = useUserSessionContext() || {};
-
   const classes = useStyles();
 
   const processSignInAttempt = React.useCallback(async () => {
-    const userSession = await signIn(email, password);
-    setUserSession({ userSession });
-    Router.push('/assignDriverToDepot');
+    const { xAuthToken } = await signIn(email, password);
+    if (xAuthToken) Router.push('/');
   }, [signIn, email, password]);
 
   return (
